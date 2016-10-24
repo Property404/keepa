@@ -6,17 +6,36 @@ Most OCP functionalities are implemented here-->
 		<title>Keepa Control Panel</title>
 		<link rel="stylesheet" href="../styles/main.css">
 		<link rel="stylesheet" href="../styles/menu.css">
+        <script src="jquery.min.js"></script>
+
 	</head>
 	<body>
+		<script>
+
+
+			function checkCreation(info, name){
+				if (info["status"]=="success"){
+					manifestAnswerKey(info["id"], name);
+				}else{
+					alert("Failure to create object");
+				}
+			}
+			function manifestAnswerKey(id, name){
+				document.getElementById("keytable").innerHTML += "<tr><td>"+name+"</td><td><button onclick='location.href=\"?op=editkey&id="+id+"\"'>edit</button></td><td><button onclick='location.href=\"?op=mankeys&rmid="+id+"\"'>delete</button></td>";
+			}
+			function createAnswerKey(name){
+				$.post("./newkey.php", {
+					"name":name}, function(d){checkCreation(d, name)}, "json");
+			}
+		</script>
 		<?php
 			error_reporting(E_ALL);
 			include_once("menu.php");
-			include_once("../headers/keypair.php");
 			include_once("../headers/security.php");
 			include_once("../headers/eventlog.php");
 		?>
 		
-		<div class="midcenter">
+		<div class="topcenter">
 		<?php
 			//Define functions here
 			function escapeText($text)
@@ -38,8 +57,10 @@ Most OCP functionalities are implemented here-->
 				//Print help info
 				if($_GET["op"]=="help"){
 					header("location: ../doc/index.php?page=0");
-				}else if(){
-
+				}else if($_GET["op"]=="mankeys"){
+					echo("<table class='keytable' id='keytable'><table><br><button onclick='createAnswerKey(\"untitled\")'>New Answerkey</button>");
+					echo("<script>manifestAnswerKey(1, 'pickles');</script>");
+					
 				
 				//Make change Password form
 				}else if($_GET["op"]=="passwd"){

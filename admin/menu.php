@@ -15,7 +15,7 @@
 			<li class="headerlink">Help &nbsp; &nbsp;
 			<ul>
 			<li><a href="?op=help&page=0">Help</a></li>
-			<li><a href="https://github.com/Property404/">GitHub</a></li>
+			<li><a href="https://github.com/Property404/keepa">GitHub</a></li>
 			</ul>
 			</li>
 		</ul>

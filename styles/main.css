@@ -54,6 +54,14 @@ input[type="submit"] {
 	text-align: center;
 }
 
+
+button {
+	border-radius: 16px;
+	color: #00aaff;
+	background-color: #353544;
+	font-size: 16px;
+	text-align: center;
+}
 input[type="submit"]:focus, input[type="submit"]:hover {
 	outline: none;
 	background-color: #464655;

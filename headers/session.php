@@ -4,7 +4,7 @@
 		functions related to the admin
 		session. It deals with non-
 		cryptographic security and the
-		initial creation of the OSIR
+		initial creation of the 
 		database.
 	*/
 	
@@ -28,8 +28,8 @@
 		
 		const _PROBLEM_TABLE_DEFINITION='CREATE TABLE PROBLEM(
 									ID int(11) AUTO_INCREMENT,
-									QUESTION varchar(128) NOT NULL,
-									ANSWER varchar(11) NOT NULL,
+									QUESTION varchar(128),
+									ANSWER varchar(11),
 									PARENT int(11) NOT NULL,
 									FOREIGN KEY(PARENT) REFERENCES ANSWERKEY(ID) ON DELETE CASCADE,
 									PRIMARY KEY(ID));';
@@ -49,7 +49,6 @@
 			if(!$link){
 				die("<div class='alert'>Can't connect to database</div>" );
 			}else{
-				echo("* Connected\n");
 			}
 			
 			//Try to connect to database
