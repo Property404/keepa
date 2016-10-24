@@ -2,6 +2,7 @@
 	//Return to login screen if not in session
 	include("../headers/session.php");
 	Session::checkAdminSession();
+	$link = Session::forceConnectDB();
 ?>
 	<div class="menu">
 		<ul>
@@ -32,5 +33,8 @@
 <?php
 			if($_SESSION['default_password']=='true'){
 				echo('<div style="background-color: red;text-align: center;color:white;">You are using the default password. Please change it immediately.</div>');
-			}
+			}else{
+				echo('<div style="background-color: black;text-align: center;color:black;">*</div>');
+
+				}
 ?>

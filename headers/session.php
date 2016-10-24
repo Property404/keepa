@@ -15,8 +15,8 @@
 		const _SQL_PASSWORD="hunter2";
 		const _ADMIN_TABLE_DEFINITION="CREATE TABLE ADMIN (
 								ID int(11) AUTO_INCREMENT,
-								USERNAME varchar(128) NOT NULL,
 								HASH varchar(512) NOT NULL,
+								USERNAME varchar(128) NOT NULL,
 								PRIMARY KEY(ID)
 								);";
 
@@ -26,13 +26,13 @@
 									HEADER varchar(128),
 									PRIMARY KEY(ID));";
 		
-		const _PROBLEM_TABLE_DEFINITION='CREATE TABLE PROBLEM(
+		const _PROBLEM_TABLE_DEFINITION="CREATE TABLE PROBLEM(
 									ID int(11) AUTO_INCREMENT,
-									QUESTION varchar(128),
-									ANSWER varchar(11),
-									PARENT int(11) NOT NULL,
+									QUESTION varchar(512),
+									ANSWER varchar(512),
+									PARENT int(11),
 									FOREIGN KEY(PARENT) REFERENCES ANSWERKEY(ID) ON DELETE CASCADE,
-									PRIMARY KEY(ID));';
+									PRIMARY KEY(ID));";
 										
 		//Private methods
 		private static function setInitialAdminTable($link){
@@ -66,10 +66,10 @@
 			//Attempt to create table if it doesn't exist
 			if(empty(mysqli_query($link, "SELECT ID FROM ADMIN"))){
 				echo("Creating table\n");
-				mysqli_query($link,self::_PROBLEM_TABLE_DEFINITION);
 				mysqli_query($link,self::_ANSWERKEY_TABLE_DEFINITION);
 				mysqli_query($link,self::_ADMIN_TABLE_DEFINITION);
 				self::setInitialAdminTable($link);
+				mysqli_query($link,self::_PROBLEM_TABLE_DEFINITION);
 			}
 			return $link;
 		}
