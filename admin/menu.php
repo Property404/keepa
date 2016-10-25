@@ -8,6 +8,7 @@
 		<ul>
 			<li class="headerlink">Keepa &nbsp; &nbsp;
 			<ul>
+			<li><a href="../index.php">Home</a></li>
 			<li><a href="?op=mankeys">Manage Answerkeys</a></li>
 			</ul>
 			</li>

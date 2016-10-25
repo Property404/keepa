@@ -196,23 +196,22 @@ Most OCP functionalities are implemented here-->
 							$_SESSION["default_password"]="false";
 							
 							//Exit and inform the user on success
-							header("Location: ?note=Password%20changed!");
+							echo("<script>window.location.href = './op=passwd?note=Password%20changed!");
 							}else{
 								
 								//Password not long enough
-								header("Location: ?op=passwd&msg=Password%20too%20short");
+								echo("<script>window.location.href = './?op=passwd&msg=Short%20password'</script>");
 							}
 						}else{
 							
 							//Confirmation password doesn't match
-							header("Location: ?op=passwd&msg=Passwords%20don't%20match");
+						echo("<script>window.location.href = './?op=passwd&msg=Nonmatching%20passwords'</script>");
 							
 						}
 					}else{
 						
 						//Wrong password
-						if(!rand(0,10)){header("Location: ?op=logout");die("");}
-						header("Location: ?op=passwd&msg=Wrong%20password");
+						echo("<script>window.location.href = './?op=passwd&msg=Wrong%20password'</script>");
 					}
 				}
 				
@@ -221,10 +220,10 @@ Most OCP functionalities are implemented here-->
 				else if($_GET["op"]=="logout"){
 					unset($_SESSION);
 					session_destroy();
-					header("Location: login.php");
+					echo("<script>window.location.href = './login.php'</script>");
 				}
 			}else{
-				header("location: ?op=log");
+				echo("<script>window.location.href += '?op=mankeys'</script>");
 			}
 		?>
 		</div>
