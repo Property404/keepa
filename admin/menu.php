@@ -6,17 +6,16 @@
 ?>
 	<div class="menu">
 		<ul>
-			<li class="headerlink">Keepa &nbsp; &nbsp;
+			<li class="headerlink">Answerkeys &nbsp; &nbsp;
 			<ul>
-			<li><a href="../index.php">Home</a></li>
-			<li><a href="?op=mankeys">Manage Answerkeys</a></li>
+			<li><a href="../index.php">View</a></li>
+			<li><a href="?op=mankeys">Manage</a></li>
 			</ul>
 			</li>
 		</ul>
 		<ul>
 			<li class="headerlink">Help &nbsp; &nbsp;
 			<ul>
-			<li><a href="?op=help&page=0">Help</a></li>
 			<li><a href="https://github.com/Property404/keepa">GitHub</a></li>
 			</ul>
 			</li>
