@@ -11,7 +11,18 @@ Most OCP functionalities are implemented here-->
 	</head>
 	<body>
 		<script>
-
+			function findGetParameter(parameterName) {
+    var result = null,
+        tmp = [];
+    location.search
+    .substr(1)
+        .split("&")
+        .forEach(function (item) {
+        tmp = item.split("=");
+        if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+    });
+    return result;
+}	
 
 			function checkKeyCreation(info, name){
 				if (info["status"]=="success"){
@@ -21,7 +32,7 @@ Most OCP functionalities are implemented here-->
 				}
 			}
 			function manifestAnswerKey(id, name){
-				document.getElementById("keytable").innerHTML += "<tr><td id=nameof"+id+" onclick='rename("+id+")'>"+name+"</td><td><button onclick='location.href=\"?op=editkey&id="+id+"\"'>edit</button></td><td><button onclick='location.href=\"?op=mankeys&rmid="+id+"\"'>delete</button></td>";
+				document.getElementById("keytable").innerHTML += "<tr><td id=nameof"+id+" onclick='rename(\"name\", "+id+")'>"+name+"</td><td><button onclick='location.href=\"?op=editkey&id="+id+"\"'>edit</button></td><td><button onclick='location.href=\"?op=mankeys&rmid="+id+"\"'>delete</button></td>";
 				$(document).on('blur','#txt_nameof'+id, function(){
 					var nombre = $(this).val();
 					if(nombre=="")return;
@@ -37,7 +48,7 @@ Most OCP functionalities are implemented here-->
 			function createAnswerKey(name){
 				$.post("./newkey.php", {
 					"name":name}, function(d){checkKeyCreation(d, name)}, "json");
-			}
+			}/*
 			function rename(id){
 				var dis = document.getElementById("nameof"+id);
 				var old = $(dis).text();
@@ -45,9 +56,39 @@ Most OCP functionalities are implemented here-->
 				$('<input></input')
 				.attr({'type':'text','id':'txt_nameof'+id, 'value':old, 'size':'16'}).appendTo("#nameof"+id);
 				$("#txt_nameof"+id).focus();
+			}*/
+			function rename(subject, id){
+				var dis = document.getElementById(subject+"of"+id);
+				var old = $(dis).text();
+				$(dis).html(''); 
+				$('<input></input')
+				.attr({'type':'text','id':'txt_'+subject+'of'+id, 'value':old, 'size':'16'}).appendTo("#"+subject+"of"+id);
+				$("#txt_"+subject+"of"+id).focus();
 			}
 			function manifestProblem(id, question, answer){
-				document.getElementById("problemtable").innerHTML += "<tr><td>"+id+"</td><td id=questionof"+id+" onclick='changeQuestion("+id+")'>"+question+"</td><td id=answerof"+id+" onclick='changeAnswer("+id+")'>"+answer+"</td></tr>";
+				document.getElementById("problemtable").innerHTML += "<tr><td>"+id+"</td><td id=questionof"+id+" onclick='rename(\"question\","+id+")'>"+question+"</td><td id=answerof"+id+" onclick='rename(\"answer\","+id+")'>"+answer+"</td><td><button onclick='location.href=\"?op=editkey&id="+findGetParameter("id")+"&rmid="+id+"\"'>delete</button></td></tr>";
+				$(document).on('blur','#txt_questionof'+id, function(){
+					var nombre = $(this).val();
+					if(nombre=="")return;
+					$.ajax({type: 'post',
+						url: 'updateproblem.php?parameter=question&id='+id+'&value='+window.btoa(nombre),
+						success:function(d){
+							console.log(d);
+							$('#questionof'+id).text(nombre);
+							}
+						});
+					});
+				$(document).on('blur','#txt_answerof'+id, function(){
+					var nombre = $(this).val();
+					if(nombre=="")return;
+					$.ajax({type: 'post',
+						url: 'updateproblem.php?parameter=answer&id='+id+'&value='+window.btoa(nombre),
+						success:function(d){
+							console.log(d);
+							$('#answerof'+id).text(nombre);
+							}
+						});
+					});
 			}
 			function createProblem(parent_id, question, answer){
 				$.post("./newproblem.php", {
@@ -93,6 +134,10 @@ Most OCP functionalities are implemented here-->
 					echo("<h1>HELP!</h1>");
 				//Edit answerkey
 				}else if($_GET["op"]=="editkey"){
+					
+					if(array_key_exists("rmid",$_GET)){
+						mysqli_query($link, "DELETE FROM PROBLEM WHERE ID=".$_GET["rmid"]." AND PARENT=".$_GET["id"].";");
+					}
 					$parent_id = $_GET["id"];
 					$name = mysqli_fetch_row(mysqli_query($link, "SELECT NAME FROM ANSWERKEY WHERE ID=".$_GET["id"].";"))[0];
 					$qaresult = mysqli_query($link, "SELECT ID,QUESTION, ANSWER FROM PROBLEM WHERE PARENT=".$_GET["id"]);
@@ -147,7 +192,7 @@ Most OCP functionalities are implemented here-->
 							if(strlen($_POST["newpwd"])>=Security::MIN_PASSWORD_LENGTH){
 							
 							//Set new hash
-							mysqli_query($link,"UPDATE admin SET hash='".Security::makeSaltedHash($_POST["newpwd"]) . "' WHERE ID=1");
+							mysqli_query($link,"UPDATE ADMIN SET HASH='".Security::makeSaltedHash($_POST["newpwd"]) . "' WHERE ID=1");
 							$_SESSION["default_password"]="false";
 							
 							//Exit and inform the user on success
